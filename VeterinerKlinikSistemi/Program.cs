@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using VeterinerKlinikSistemi.Veri;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<VeritabaniBaglami>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("VarsayilanBaglanti")));
 
 var app = builder.Build();
 
