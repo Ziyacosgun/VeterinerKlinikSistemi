@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,11 +21,33 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-dark fw-semibold">@User.Identity.Name</span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Hesap" asp-action="Cikis" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-link nav-link text-danger">Çıkış Yap</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Hesap" asp-action="Giris">Giriş Yap</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Hesap" asp-action="Kayit">Kayıt Ol</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
