@@ -1,0 +1,51 @@
+﻿@model IEnumerable<VeterinerKlinikSistemi.Models.Veteriner>
+@{
+    ViewData["Title"] = "Veteriner Yönetimi";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Veteriner Hekimler</h2>
+    <a asp-action="Ekle" class="btn btn-primary">+ Yeni Veteriner Ekle</a>
+</div>
+
+@if (TempData["Basari"] != null)
+{
+    <div class="alert alert-success">@TempData["Basari"]</div>
+}
+
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Ad Soyad</th>
+            <th>Uzmanlık Alanı</th>
+            <th>Klinik</th>
+            <th>Verdiği Hizmetler</th>
+            <th>Hesap (E-posta)</th>
+            <th style="width: 180px;">İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.AdSoyad</td>
+                <td>@item.UzmanlikAlani</td>
+                <td>@item.Klinik?.Ad</td>
+                <td>
+                    @foreach (var hizmet in item.Hizmetler)
+                    {
+                        <span class="badge bg-info text-dark me-1">@hizmet.Ad</span>
+                    }
+                </td>
+                <td>@(item.Kullanici?.Email ?? "-")</td>
+                <td>
+                    <a asp-action="Duzenle" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Düzenle</a>
+                    <form asp-action="Sil" asp-route-id="@item.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Bu veterineri silmek istediğinize emin misiniz?');">
+                        <button type="submit" class="btn btn-sm btn-danger">Sil</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

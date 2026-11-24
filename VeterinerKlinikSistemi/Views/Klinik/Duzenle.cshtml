@@ -1,0 +1,49 @@
+﻿@model VeterinerKlinikSistemi.Models.Klinik
+@{
+    ViewData["Title"] = "Klinik Düzenle";
+}
+
+<h2>Klinik Düzenle</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Duzenle" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3">
+                <label asp-for="Ad" class="form-label">Klinik Adı</label>
+                <input asp-for="Ad" class="form-control" />
+                <span asp-validation-for="Ad" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Adres" class="form-label">Adres</label>
+                <textarea asp-for="Adres" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Adres" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Telefon" class="form-label">Telefon</label>
+                <input asp-for="Telefon" class="form-control" />
+                <span asp-validation-for="Telefon" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="AcilisSaati" class="form-label">Açılış Saati</label>
+                    <input asp-for="AcilisSaati" type="time" class="form-control" />
+                    <span asp-validation-for="AcilisSaati" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="KapanisSaati" class="form-label">Kapanış Saati</label>
+                    <input asp-for="KapanisSaati" type="time" class="form-control" />
+                    <span asp-validation-for="KapanisSaati" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-warning">Güncelle</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

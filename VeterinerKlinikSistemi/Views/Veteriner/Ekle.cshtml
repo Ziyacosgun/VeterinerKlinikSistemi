@@ -1,0 +1,74 @@
+﻿@model VeterinerKlinikSistemi.Models.Veteriner
+@{
+    ViewData["Title"] = "Yeni Veteriner Ekle";
+    var hizmetler = ViewBag.Hizmetler as List<VeterinerKlinikSistemi.Models.Hizmet> ?? new();
+}
+
+<h2>Yeni Veteriner Ekle</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Ekle" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3">
+                <label asp-for="KlinikId" class="form-label">Klinik</label>
+                <select asp-for="KlinikId" asp-items="ViewBag.Klinikler" class="form-select">
+                    <option value="">-- Klinik Seçiniz --</option>
+                </select>
+                <span asp-validation-for="KlinikId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AdSoyad" class="form-label">Ad Soyad</label>
+                <input asp-for="AdSoyad" class="form-control" />
+                <span asp-validation-for="AdSoyad" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UzmanlikAlani" class="form-label">Uzmanlık Alanı</label>
+                <input asp-for="UzmanlikAlani" class="form-control" placeholder="Örn: Cerrahi, Dahiliye, Egzotik Hayvanlar" />
+                <span asp-validation-for="UzmanlikAlani" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Verdiği Hizmetler</label>
+                <div class="border rounded p-2">
+                    @if (!hizmetler.Any())
+                    {
+                        <small class="text-muted">Henüz tanımlı hizmet yok.</small>
+                    }
+                    else
+                    {
+                        @foreach (var hizmet in hizmetler)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="secilenHizmetler" value="@hizmet.Id" id="hizmet_@hizmet.Id" />
+                                <label class="form-check-label" for="hizmet_@hizmet.Id">@hizmet.Ad (@hizmet.SureDakika dk)</label>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h6 class="card-title">Sisteme Giriş Hesabı (Opsiyonel)</h6>
+                    <div class="mb-2">
+                        <label class="form-label">E-posta</label>
+                        <input type="email" name="email" class="form-control" placeholder="vet@klinik.com" />
+                    </div>
+                    <div>
+                        <label class="form-label">Şifre</label>
+                        <input type="password" name="sifre" class="form-control" placeholder="En az 3 karakter" />
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Kaydet</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
