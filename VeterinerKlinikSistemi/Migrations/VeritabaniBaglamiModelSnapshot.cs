@@ -478,7 +478,7 @@ namespace VeterinerKlinikSistemi.Migrations
 
                     b.HasIndex("VeterinerId");
 
-                    b.ToTable("VeterinerMusaitlikler");
+                    b.ToTable("VeterinerMusaitlikleri");
                 });
 
             modelBuilder.Entity("HizmetVeteriner", b =>

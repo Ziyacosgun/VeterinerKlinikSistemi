@@ -1,0 +1,44 @@
+﻿@model VeterinerKlinikSistemi.Models.VeterinerMusaitlik
+@{
+    ViewData["Title"] = "Müsaitlik Düzenle";
+}
+
+<h2>Müsaitlik Düzenle</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Duzenle" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3">
+                <label asp-for="VeterinerId" class="form-label">Veteriner Hekim</label>
+                <select asp-for="VeterinerId" asp-items="ViewBag.Veterinerler" class="form-select"></select>
+                <span asp-validation-for="VeterinerId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Gun" class="form-label">Gün</label>
+                <select asp-for="Gun" asp-items="ViewBag.Gunler" class="form-select"></select>
+                <span asp-validation-for="Gun" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="BaslangicSaati" class="form-label">Başlangıç Saati</label>
+                    <input asp-for="BaslangicSaati" type="time" class="form-control" />
+                    <span asp-validation-for="BaslangicSaati" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="BitisSaati" class="form-label">Bitiş Saati</label>
+                    <input asp-for="BitisSaati" type="time" class="form-control" />
+                    <span asp-validation-for="BitisSaati" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-warning">Güncelle</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -15,7 +15,7 @@ namespace VeterinerKlinikSistemi.Veri
         public DbSet<Klinik> Klinikler { get; set; }
         public DbSet<Hizmet> Hizmetler { get; set; }
         public DbSet<Veteriner> Veterinerler { get; set; }
-        public DbSet<VeterinerMusaitlik> VeterinerMusaitlikler { get; set; }
+        public DbSet<VeterinerMusaitlik> VeterinerMusaitlikleri { get; set; }
         public DbSet<EvcilHayvan> EvcilHayvanlar { get; set; }
         public DbSet<AsiKaydi> AsiKayitlari { get; set; }
         public DbSet<Randevu> Randevular { get; set; }
