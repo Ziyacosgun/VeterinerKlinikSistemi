@@ -1,0 +1,36 @@
+﻿@model VeterinerKlinikSistemi.Models.EvcilHayvan
+@{
+    ViewData["Title"] = $"{Model.Ad} - Aşı Geçmişi";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@Model.Ad (@Model.Tur / @Model.Irk) - Aşı Geçmişi</h2>
+    <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+</div>
+
+@if (!Model.AsiKayitlari.Any())
+{
+    <div class="alert alert-info">Bu evcil hayvan için henüz kayıtlı bir aşı bulunmuyor.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Aşı Adı</th>
+                <th>Yapıldığı Tarih</th>
+                <th>Sonraki Doz Tarihi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var asi in Model.AsiKayitlari)
+            {
+                <tr>
+                    <td class="fw-semibold">@asi.AsiAdi</td>
+                    <td>@asi.YapildigiTarih.ToString("dd.MM.yyyy")</td>
+                    <td>@(asi.SonrakiDozTarihi.HasValue ? asi.SonrakiDozTarihi.Value.ToString("dd.MM.yyyy") : "-")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
