@@ -1,0 +1,82 @@
+﻿@model IEnumerable<VeterinerKlinikSistemi.Models.Randevu>
+@using VeterinerKlinikSistemi.Models
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Randevularım</h2>
+    <a asp-action="Al" class="btn btn-primary">+ Yeni Randevu Al</a>
+</div>
+
+@if (TempData["Basari"] != null)
+{
+    <div class="alert alert-success">@TempData["Basari"]</div>
+}
+@if (TempData["Hata"] != null)
+{
+    <div class="alert alert-danger">@TempData["Hata"]</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz bir randevunuz bulunmuyor.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Tarih / Saat</th>
+                <th>Evcil Hayvan</th>
+                <th>Klinik & Veteriner</th>
+                <th>Hizmet</th>
+                <th>Ücret</th>
+                <th>Durum</th>
+                <th style="width: 120px;">İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.RandevuTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td class="fw-semibold">@item.EvcilHayvan?.Ad</td>
+                    <td>@item.Veteriner?.Klinik?.Ad <br /><small class="text-muted">@item.Veteriner?.AdSoyad</small></td>
+                    <td>@item.Hizmet?.Ad (@item.SureDakika dk)</td>
+                    <td>@item.Ucret.ToString("N2") ₺</td>
+                    <td>
+                        @switch (item.Durum)
+                        {
+                            case RandevuDurumu.Bekliyor:
+                                <span class="badge bg-warning text-dark">Bekliyor</span>
+                                break;
+                            case RandevuDurumu.Onaylandi:
+                                <span class="badge bg-success">Onaylandı</span>
+                                break;
+                            case RandevuDurumu.Reddedildi:
+                                <span class="badge bg-danger">Reddedildi</span>
+                                break;
+                            case RandevuDurumu.Tamamlandi:
+                                <span class="badge bg-primary">Tamamlandı</span>
+                                break;
+                        }
+                    </td>
+                    <td>
+                        @if (item.Durum == RandevuDurumu.Bekliyor)
+                        {
+                            <form asp-action="IptalEt" asp-route-id="@item.Id" method="post"
+                                  onsubmit="return confirm('Randevuyu iptal etmek istediğinize emin misiniz?');">
+                                <button type="submit" class="btn btn-sm btn-danger">İptal Et</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

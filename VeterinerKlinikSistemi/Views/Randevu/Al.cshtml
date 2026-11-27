@@ -1,0 +1,77 @@
+﻿@model VeterinerKlinikSistemi.Models.Randevu
+@{
+    ViewData["Title"] = "Yeni Randevu Al";
+}
+
+<h2>Yeni Randevu Al</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Al" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="EvcilHayvanId" class="form-label">Evcil Hayvan</label>
+                <select asp-for="EvcilHayvanId" asp-items="ViewBag.EvcilHayvanlar" class="form-select">
+                    <option value="">-- Evcil Hayvan Seçiniz --</option>
+                </select>
+                <span asp-validation-for="EvcilHayvanId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="HizmetId" class="form-label">Hizmet</label>
+                <select asp-for="HizmetId" asp-items="ViewBag.Hizmetler" class="form-select" id="hizmetSelect">
+                    <option value="">-- Hizmet Seçiniz --</option>
+                </select>
+                <span asp-validation-for="HizmetId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="VeterinerId" class="form-label">Veteriner Hekim</label>
+                <select asp-for="VeterinerId" asp-items="ViewBag.Veterinerler" class="form-select" id="veterinerSelect">
+                    <option value="">-- Önce Hizmet Seçiniz --</option>
+                </select>
+                <span asp-validation-for="VeterinerId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RandevuTarihi" class="form-label">Randevu Tarih ve Saati</label>
+                <input asp-for="RandevuTarihi" type="datetime-local" class="form-control"
+                       min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                <span asp-validation-for="RandevuTarihi" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Randevu Oluştur</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById("hizmetSelect").addEventListener("change", function () {
+            const hizmetId = this.value;
+            const vetSelect = document.getElementById("veterinerSelect");
+            vetSelect.innerHTML = '<option value="">Yükleniyor...</option>';
+
+            if (!hizmetId) {
+                vetSelect.innerHTML = '<option value="">-- Önce Hizmet Seçiniz --</option>';
+                return;
+            }
+
+            fetch(`/Randevu/VeterinerleriGetir?hizmetId=${hizmetId}`)
+                .then(response => response.json())
+                .then(data => {
+                    vetSelect.innerHTML = '<option value="">-- Veteriner Seçiniz --</option>';
+                    data.forEach(v => {
+                        const option = document.createElement("option");
+                        option.value = v.id;
+                        option.textContent = v.ad;
+                        vetSelect.appendChild(option);
+                    });
+                });
+        });
+    </script>
+}
