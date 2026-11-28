@@ -1,0 +1,109 @@
+﻿@model VeterinerKlinikSistemi.Models.Randevu
+@{
+    ViewData["Title"] = "Muayene ve Aşı Kaydı";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Muayene & Aşı İşlemleri</h2>
+    <a asp-action="Index" class="btn btn-secondary">Randevulara Dön</a>
+</div>
+
+@if (TempData["Basari"] != null)
+{
+    <div class="alert alert-success">@TempData["Basari"]</div>
+}
+@if (TempData["Hata"] != null)
+{
+    <div class="alert alert-danger">@TempData["Hata"]</div>
+}
+
+<div class="row g-4">
+    <!-- Sol Taraf: Hasta Bilgileri ve Muayene Notu -->
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Randevu & Hasta Bilgileri</div>
+            <div class="card-body">
+                <p class="mb-1"><strong>Evcil Hayvan:</strong> @Model.EvcilHayvan?.Ad (@Model.EvcilHayvan?.Tur - @Model.EvcilHayvan?.Irk)</p>
+                <p class="mb-1"><strong>Kilo:</strong> @Model.EvcilHayvan?.Kilo kg</p>
+                <p class="mb-1"><strong>Sahibi:</strong> @Model.EvcilHayvan?.Sahip?.AdSoyad (@Model.EvcilHayvan?.Sahip?.Email)</p>
+                <p class="mb-1"><strong>Hizmet:</strong> @Model.Hizmet?.Ad (@Model.SureDakika dk)</p>
+                <p class="mb-0"><strong>Tarih:</strong> @Model.RandevuTarihi.ToString("dd.MM.yyyy HH:mm")</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">Muayene Notu & Tamamlama</div>
+            <div class="card-body">
+                <form asp-action="MuayeneTamamla" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label for="muayeneNotu" class="form-label">Muayene Bulguları / Tedavi Notu</label>
+                        <textarea name="muayeneNotu" id="muayeneNotu" rows="5" class="form-control"
+                                  placeholder="Yapılan işlemler, reçete veya öneriler...">@Model.MuayeneNotu</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Muayeneyi Tamamla ve Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sağ Taraf: Aşı Ekleme ve Geçmiş Aşılar -->
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header bg-success text-white">+ Yeni Aşı Kaydı Ekle</div>
+            <div class="card-body">
+                <form asp-action="AsiEkle" method="post">
+                    <input type="hidden" name="randevuId" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label class="form-label">Aşı Adı</label>
+                        <input type="text" name="asiAdi" class="form-control" placeholder="Örn: Kuduz, Karma Aşı, İç-Dış Parazit" required />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Yapıldığı Tarih</label>
+                            <input type="date" name="yapildigiTarih" class="form-control"
+                                   value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Sonraki Doz Tarihi (Opsiyonel)</label>
+                            <input type="date" name="sonrakiDozTarihi" class="form-control" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-success w-100">Aşıyı Kaydet</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-secondary text-white">@Model.EvcilHayvan?.Ad - Mevcut Aşı Geçmişi</div>
+            <div class="card-body p-0">
+                @if (Model.EvcilHayvan == null || !Model.EvcilHayvan.AsiKayitlari.Any())
+                {
+                    <p class="p-3 mb-0 text-muted">Kayıtlı aşı bulunmuyor.</p>
+                }
+                else
+                {
+                    <table class="table table-sm table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Aşı</th>
+                                <th>Tarih</th>
+                                <th>Sonraki Doz</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var asi in Model.EvcilHayvan.AsiKayitlari)
+                            {
+                                <tr>
+                                    <td>@asi.AsiAdi</td>
+                                    <td>@asi.YapildigiTarih.ToString("dd.MM.yyyy")</td>
+                                    <td>@(asi.SonrakiDozTarihi.HasValue ? asi.SonrakiDozTarihi.Value.ToString("dd.MM.yyyy") : "-")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>

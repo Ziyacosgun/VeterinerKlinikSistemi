@@ -26,6 +26,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
                         </li>
+
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
@@ -40,7 +41,13 @@
                                 </ul>
                             </li>
                         }
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        else if (User.IsInRole("Veteriner"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark fw-semibold" asp-controller="VeterinerPaneli" asp-action="Index">Veteriner Paneli</a>
+                            </li>
+                        }
+                        else if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="EvcilHayvan" asp-action="Index">Evcil Hayvanlarım</a>
@@ -49,7 +56,6 @@
                                 <a class="nav-link text-dark" asp-controller="Randevu" asp-action="Index">Randevularım</a>
                             </li>
                         }
-
                     </ul>
                     <ul class="navbar-nav">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
